@@ -49,7 +49,14 @@ void Write_data_back(Account* Account_info[])
 	{
 		for (int i = 0; i < SIZE; i++)
 		{
-			ofs << Account_info[i]->ID << " " << Account_info[i]->email << " " << Account_info[i]->balance << endl;
+			if (i != SIZE - 1)
+			{
+				ofs << Account_info[i]->ID << " " << Account_info[i]->email << " " << Account_info[i]->balance << endl;
+			}
+			else
+			{
+				ofs << Account_info[i]->ID << " " << Account_info[i]->email << " " << Account_info[i]->balance;
+			}
 		}
 		ofs.close();
 	}
@@ -101,4 +108,3 @@ int main()
 	}
 	return 0;
 }
-	

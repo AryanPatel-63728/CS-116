@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <iomanip>
+#include <string>
 
 using namespace std;
 
@@ -14,97 +15,133 @@ struct Account
 	double balance;
 };
 
-Account* Find_Account_By_ID(Account* Account_info[], int account_ID)
+// function declerations
+
+void LoadData_From_file(Account* arry[], int& count, string filename);
+
+Account* Find_Account_By_ID(Account* arry[], int count, int account_ID);
+
+void Update_balance(Account* useraccount, double despositAmount);
+
+void Write_data_back(Account* arry[], int& count, string filename);
+
+int main()
 {
-	for (int i = 0; i < SIZE; i++)
+    // Initialize the struct to be used
+    Account* arr[SIZE];
+    int count = 0;
+    string filename = "Account_Data.txt";
+
+    // Load data from the file
+    LoadData_From_file(arr, count, filename);
+
+    int account_id;
+    cout << "Give your account ID: " << endl;
+    cin >> account_id;
+
+    // Check if the account ID is not in the data
+    Account* userAccount = Find_Account_By_ID(arr, count, account_id);
+    if (userAccount == nullptr)
+    {
+        // Create a new account
+        if (count < SIZE)
+        {
+            arr[count] = new Account;
+            arr[count]->ID = account_id;
+
+            cout << "Enter email for account with ID " << account_id << ": ";
+            cin >> arr[count]->email;
+
+            // Set balance to 0 for new accounts
+            arr[count]->balance = 0.0;
+
+            userAccount = arr[count];
+            count++;
+        }
+        else
+        {
+            cout << "Error: Cannot create a new account. Maximum size reached." << endl;
+            return 1;
+        }
+    }
+
+    // Ask for a deposit
+    double deposit;
+    cout << "How much deposit to account " << userAccount->ID << ": ";
+    cin >> deposit;
+    Update_balance(userAccount, deposit);
+
+    // Update the data back to the file
+    Write_data_back(arr, count, filename);
+
+    // Clean up allocated memory
+    for (int i = 0; i < count; ++i)
+    {
+        delete arr[i];
+    }
+
+    return 0;
+}
+
+void LoadData_From_file(Account* arry[], int& count, string filename)
+{
+    ifstream ifs(filename);
+    string line;
+
+    while (getline(ifs, line) && count < SIZE)
+    {
+        istringstream iss(line);
+        int id;
+        double balance;
+        string email;
+
+        iss >> id >> email >> balance;
+
+        // Check if the ID is not found, then create a new account
+        if (Find_Account_By_ID(arry, count, id) == nullptr)
+        {
+            arry[count] = new Account;
+            arry[count]->ID = id;
+            arry[count]->email = email;
+            arry[count]->balance = balance;
+            count++;
+        }
+    }
+
+    ifs.close();
+}
+
+Account* Find_Account_By_ID(Account* arry[], int count, int account_ID)
+{
+	for (int i = 0; i < count; i++)
 	{
-		if (Account_info[i]->ID == account_ID)
+		if (arry[i]->ID == account_ID)
 		{
-			return Account_info[i];
+			return arry[i];
 		}
 	}
 	return nullptr;
 }
-void Update_balance(Account* useraccount)
+
+void Write_data_back(Account* arry[], int& count, string filename)
 {
-	// ask the user how much they would like to deposit into the account
-	double depositAmount;
-	cout << "Enter the deposit amount for the account ID" << useraccount->ID <<": $";
-	cin >> depositAmount;
-	// update the value
-	useraccount->balance += depositAmount;
-	cout << "Amount has been succesfully been added to the account ID" << useraccount->ID << endl;
-}
-void Write_data_back(Account* Account_info[])
-{
-	// Write the array back into the data file with any updated values.
-	ofstream ofs;
-	// Open the file with data
-	ofs.open("Account_Data.txt");
-	if (ofs.fail())
+	ofstream ofs(filename);
+	for (int i = 0; i < count; i++)
 	{
-		cout << "Error opening the file for info update" << endl;
-	}
-	else
-	{
-		for (int i = 0; i < SIZE; i++)
+		if (i < count - 1)
 		{
-			if (i != SIZE - 1)
-			{
-				ofs << Account_info[i]->ID << " " << Account_info[i]->email << " " << Account_info[i]->balance << endl;
-			}
-			else
-			{
-				ofs << Account_info[i]->ID << " " << Account_info[i]->email << " " << Account_info[i]->balance;
-			}
+			ofs << arry[i]->ID << " " << arry[i]->email << " " << arry[i]->balance << endl;
 		}
-		ofs.close();
+		else
+		{
+			ofs << arry[i]->ID << " " << arry[i]->email << " " << arry[i]->balance;
+		}
 	}
+	ofs.close();
 }
 
-int main()
+void Update_balance(Account* useraccount, double despositAmount)
 {
-	// Iniciate the strct to be used
-	Account menu;
-	ifstream ifs;
-	// Open the file with data
-	ifs.open("Account_Data.txt");
-	// if fail to open then print an error and exit
-	if (ifs.fail())
-	{
-		cout << "Error opening the file." << endl;
-		return 1;
-	}
-	string Account_Data;
-	// Make a pointer arry of size 10
-	Account* Account_info[SIZE];
-	for (int i = 0; i < SIZE; ++i)
-	{
-		// Create a new Account instance
-		Account* newAccount = new Account;
-		// Read data from the file
-		ifs >> newAccount->ID >> newAccount->email >> newAccount->balance;
-		// Add the Account pointer to the array
-		Account_info[i] = newAccount;
-	}
-	ifs.close();
-
-	int account_ID;
-	cout << "Enter an ID to find and update balance: " << endl;
-	cin >> account_ID;
-	Account* Found_Account = Find_Account_By_ID(Account_info, account_ID);
-	if (Found_Account != nullptr)
-	{
-		Update_balance(Found_Account);
-		Write_data_back(Account_info);
-	}
-	else
-	{
-		cout << "ID not Found" << endl;
-	}
-	for (int i = 0; i < SIZE; ++i)
-	{
-		delete Account_info[i];
-	}
-	return 0;
+	useraccount->balance += despositAmount;
+	cout << "Succesfully added the amount to the account" << endl;
 }

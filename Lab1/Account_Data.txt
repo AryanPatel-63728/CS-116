@@ -1,10 +1,10 @@
 123 a@ohlone.edu 0
-124 b@ohlone.edu 110
-125 c@ohlone.edu 0
+124 b@ohlone.edu 0
+125 c@ohlone.edu 200
 126 d@ohlone.edu 0
-127 e@ohlone.edu 100000
+127 e@ohlone.edu 0
 128 f@ohlone.edu 0
-129 g@ohlone.edu 1
-130 h@ohlone.edu 120
-131 i@ohlone.edu 0
-132 j@ohlone.edu 100
+129 g@ohlone.edu 0
+130 h@ohlone.edu 0
+132 a@student.ohlone.edu 1200
+135 a@ohlone.edu 2009

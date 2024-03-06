@@ -17,6 +17,11 @@ void Roster::add_student(int id, string name, int street_number, string street_n
 	current_size++;
 }
 
+void search_by_id(int student_id)
+{
+
+}
+
 void Roster::print_roster()
 {
 	for (int i = 0; i < this->current_size; ++i)

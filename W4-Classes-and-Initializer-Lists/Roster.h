@@ -9,6 +9,7 @@ public:
 	Roster(int class_size);
 	void add_student(int id, string name, int street_number, string street_name);
 	void print_roster();
+	void search_by_id(int student_id);
 private:
 	int class_size;
 	int current_size;

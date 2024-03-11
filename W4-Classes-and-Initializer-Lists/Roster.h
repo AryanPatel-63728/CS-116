@@ -2,14 +2,22 @@
 #define ROSTER_H
 
 #include "Student.h"
+#include <vector>
 
 class Roster
 {
 public:
+	// constructor
 	Roster(int class_size);
-	void add_student(int id, string name, int street_number, string street_name);
+
+	// deconstructor
+	~Roster();
+
+	// member functions
+	void add_student(int id, string firstname, string lastname, int street_number, string street_name);
 	void print_roster();
-	void search_by_id(int student_id);
+	Student* search_by_id(int student_id);
+
 private:
 	int class_size;
 	int current_size;

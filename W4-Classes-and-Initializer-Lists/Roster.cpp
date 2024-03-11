@@ -8,18 +8,34 @@ Roster::Roster(int class_size)
 	this->class_size = class_size;
 }
 
-void Roster::add_student(int id, string name, int street_number, string street_name)
+Roster::~Roster()
+{
+	for (int i = 0; i < current_size; ++i)
+	{
+		delete students[i];
+	}
+	delete[] students;
+}
+
+void Roster::add_student(int id, string firstname, string lastname, int street_number, string street_name)
 {
 	if (this->current_size < this->class_size)
 	{
-		this->students[this->current_size] = new Student(id, name, street_number, street_name);
+		this->students[this->current_size] = new Student(id, firstname, lastname, street_number, street_name);
+		this->current_size++;  // Increment current_size only when adding a student
 	}
-	current_size++;
 }
 
-void search_by_id(int student_id)
+Student* Roster::search_by_id(int student_id)
 {
-
+	for (int i = 0; i < current_size; ++i)  // Iterate until current_size, not SIZE_MAX
+	{
+		if (students[i]->get_id() == student_id)
+		{
+			return students[i];
+		}
+	}
+	return nullptr;
 }
 
 void Roster::print_roster()
@@ -28,7 +44,7 @@ void Roster::print_roster()
 	{
 		// Dereference the pointer to access the actual Student object
 		Student* student = this->students[i];
-		cout << "[" << i << "] ID: " << student->get_id() << ", Name: " << student->get_name(); // Add a newline for formatting
+		cout << "[" << i << "] ID: " << student->get_id() << ", First Name: " << student->get_firstName() << ", Last Name: " << student->get_lastName(); // Add a newline for formatting
 		Address studentAddress = student->get_address();
 		cout << ", Address: " << studentAddress.get_street_number() << " " << studentAddress.get_street_name() << endl;
 	}

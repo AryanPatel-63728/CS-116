@@ -9,32 +9,32 @@ using namespace std;
 class Student
 {
 public:
+	// constructor
 	Student(int id, string firstname, string lastname, int street_number, string street_name);
+
 	//seters
 	void set_firstName(string firstName);
 	void set_lastName(string lastName);
 	void set_id(int id);
-	//getters
+
+	// getters
 	string get_firstName();
 	string get_lastName();
 	int get_id();
 	Address get_address();
-	//print all 3 private varibles
+
+	// print all 3 private varibles
 	void print_student();
 
 	// overloading operators
+	
+	friend bool operator<(const Student& s1, const Student& s2);
+	friend bool operator>(const Student& s1, const Student& s2);
 
-	//== compares id
-	//!= compares id
-	//<< output operator (look at 12.1 for an example)
+	friend bool operator==(const Student& s1, const Student& s2);
+	friend bool operator!=(const Student& s1, const Student& s2);
 
-	bool operator < (const Student& other);
-	bool operator > (const Student& other);
-
-	bool operator==(Student a, Student b);
-	bool operator!=(Student a, Student b);
-
-	friend 
+	friend std::ostream& operator<<(std::ostream& out, const Student& student);
 
 private:
 	string first_name;
@@ -43,4 +43,4 @@ private:
 	Address address;
 };
 
-#endif // !1
+#endif

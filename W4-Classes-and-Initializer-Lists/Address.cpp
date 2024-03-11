@@ -32,5 +32,5 @@ void Address::set_street_name(string street_name)
 //print
 void Address::print_address()
 {
-	cout << this->street_number << this->street_name << endl;
+	cout << this->street_number << " " << this->street_name << endl;
 }

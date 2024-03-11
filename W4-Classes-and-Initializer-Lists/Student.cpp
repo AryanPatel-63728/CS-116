@@ -54,19 +54,47 @@ void Student::print_student()
 
 // overloading operators
 
-//< less than compares the names of the students.First by last name, then by first name
-//> greater than compares the names of the students.First by last name, then by first name
-//== compares id
-//!= compares id
-//<< output operator (look at 12.1 for an example)
-
-bool Student::operator== (const Student& other)
+// < less than compares the names of the students.First by last name, then by first name
+bool operator<(const Student& s1, const Student& s2)
 {
-
+	if (s1.last_name == s2.last_name)
+	{
+		return s1.first_name < s2.first_name;
+	}
+	else
+	{
+		return s1.last_name < s2.last_name;
+	}
 }
 
-ostream& operator<<(ostream& out, Student a)
+// > greater than compares the names of the students.First by last name, then by first name
+bool operator>(const Student& s1, const Student& s2)
 {
-	out << a.get_firstName() << " " << a.get_lastName();
+	if (s1.last_name == s2.last_name)
+	{
+		return s1.first_name > s2.first_name;
+	}
+	else
+	{
+		return s1.last_name > s2.last_name;
+	}
+}
+
+// == compares id
+bool operator==(const Student& s1, const Student& s2)
+{
+    return s1.id == s2.id;
+}
+
+// != compares id
+bool operator!=(const Student& s1, const Student& s2)
+{
+    return !(s1 == s2);
+}
+
+// << output operator
+std::ostream& operator<<(std::ostream& out, const Student& student)
+{
+	out << "ID: " << student.id << ", Name: " << student.first_name << " " << student.last_name;
 	return out;
 }
